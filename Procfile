@@ -1,1 +1,1 @@
-web: java -jar target/twitter-app-1.0.jar
+web: java $JAVA_OPTS -jar target/*.jar --p $PORT
