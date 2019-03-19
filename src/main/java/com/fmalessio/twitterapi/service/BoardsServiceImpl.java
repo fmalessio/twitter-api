@@ -24,4 +24,9 @@ public class BoardsServiceImpl implements BoardsService {
 		return boardRepo.findById(id);
 	}
 
+	@Override
+	public void delete(long id) {
+		boardRepo.deleteById(id);
+	}
+
 }

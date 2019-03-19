@@ -6,4 +6,6 @@ public interface InterestsService {
 
 	void create(Interest interest);
 
+	void delete(long id);
+
 }

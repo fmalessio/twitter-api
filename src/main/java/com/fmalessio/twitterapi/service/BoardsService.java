@@ -10,4 +10,6 @@ public interface BoardsService {
 
 	void createBoard(Board board);
 
+	void delete(long id);
+
 }

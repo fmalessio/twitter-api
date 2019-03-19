@@ -17,4 +17,9 @@ public class InterestsServiceImpl implements InterestsService {
 		interestRepository.saveAndFlush(interest);
 	}
 
+	@Override
+	public void delete(long id) {
+		interestRepository.deleteById(id);
+	}
+
 }
