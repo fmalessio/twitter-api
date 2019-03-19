@@ -5,6 +5,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fmalessio.twitterapi.entity.User;
 import com.fmalessio.twitterapi.repository.UserRepository;
 
@@ -15,10 +18,15 @@ public class UsersServiceImpl implements UsersService {
 	private UserRepository userRepo;
 
 	@Override
-	public String getUserInfo(String id) {
+	public String getUserInfo(String id) throws JsonProcessingException {
 		Optional<User> user = findUserById(id);
 		if (user.isPresent()) {
-			return user.toString();
+			ObjectMapper mapper = new ObjectMapper();
+			mapper.registerModule(new Jdk8Module());
+			
+			String serializedUser = mapper.writeValueAsString(user);
+			
+			return serializedUser;
 		}
 		return "User not exist.";
 	}

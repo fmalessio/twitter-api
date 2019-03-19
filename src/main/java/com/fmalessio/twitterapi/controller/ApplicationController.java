@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fmalessio.twitterapi.service.UsersService;
 
 @Controller
@@ -22,7 +23,8 @@ public class ApplicationController {
 	
 	@RequestMapping("/check-user-db")
 	@ResponseBody
-	public String checkDb(@RequestParam(name = "id", defaultValue = "test@test.com") String id) {
+	public String checkDb(@RequestParam(name = "id", defaultValue = "test@test.com") String id)
+			throws JsonProcessingException {
 		return usersService.getUserInfo(id);
 	}
 
