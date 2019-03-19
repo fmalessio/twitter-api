@@ -68,4 +68,12 @@ public class Board {
 		this.userId = userId;
 	}
 
+	public List<Interest> getInterests() {
+		return interests;
+	}
+
+	public void setInterests(List<Interest> interests) {
+		this.interests = interests;
+	}
+
 }
