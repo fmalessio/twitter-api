@@ -7,7 +7,7 @@ import com.fmalessio.twitterapi.entity.User;
 
 public interface UsersService {
 
-	String login(User user) throws JsonProcessingException;
+	User login(User user);
 
 	String getUserInfo(String id) throws JsonProcessingException;
 
