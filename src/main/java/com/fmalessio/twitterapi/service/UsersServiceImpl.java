@@ -18,14 +18,39 @@ public class UsersServiceImpl implements UsersService {
 	private UserRepository userRepo;
 
 	@Override
+	public String login(User userParam) throws JsonProcessingException {
+		Optional<User> user = findUserById(userParam.getId());
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new Jdk8Module());
+
+		if (user.isPresent()) {
+			String serializedUser = mapper.writeValueAsString(user);
+			return serializedUser;
+		}
+
+		// Create
+		user = Optional.of(createUser(userParam));
+
+		String serializedUser = mapper.writeValueAsString(user);
+		return serializedUser;
+	}
+
+	private User createUser(User user) {
+		user = new User(user.getId(), user.getFullName());
+		userRepo.saveAndFlush(user);
+		return user;
+	}
+
+	@Override
 	public String getUserInfo(String id) throws JsonProcessingException {
 		Optional<User> user = findUserById(id);
 		if (user.isPresent()) {
 			ObjectMapper mapper = new ObjectMapper();
 			mapper.registerModule(new Jdk8Module());
-			
+
 			String serializedUser = mapper.writeValueAsString(user);
-			
+
 			return serializedUser;
 		}
 		return "User not exist.";
