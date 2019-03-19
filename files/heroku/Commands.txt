@@ -1,0 +1,19 @@
+
+// Docs
+https://devcenter.heroku.com/articles/getting-started-with-java
+
+// Create Heroku
+heroku create
+
+// Deploy app from Github
+git push heroku master
+
+// Logs
+heroku logs --tail
+
+// Run local
+heroku local web
+
+// Push to Heroku from local directory instead of GitHub repository
+// https://stackoverflow.com/questions/32102793/heroku-push-to-heroku-from-local-directory-instead-of-github-repository
+git push heroku localbranch:master
