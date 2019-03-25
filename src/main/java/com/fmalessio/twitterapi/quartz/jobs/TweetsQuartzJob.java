@@ -5,6 +5,7 @@ import static java.util.stream.Collectors.collectingAndThen;
 import static java.util.stream.Collectors.toCollection;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.TreeSet;
 
@@ -25,9 +26,11 @@ public class TweetsQuartzJob extends QuartzJobBean {
 	private Twitter twitter;
 
 	@Autowired
-	public TweetsQuartzJob(@Value("${twitter.consumerKey}") String twitterConsumerKey,
-			@Value("${twitter.consumerSecret}") String twitterConsumerSecret) {
-		twitter = new TwitterTemplate(twitterConsumerKey, twitterConsumerSecret);
+	public TweetsQuartzJob(@Value("${twitter.key}") String twitterKey) {
+		byte[] decodedBytes = Base64.getDecoder().decode(twitterKey);
+		String decodedString = new String(decodedBytes);
+		String[] keys = decodedString.split("#");
+		twitter = new TwitterTemplate(keys[0], keys[1]);
 	}
 
 	@Override
