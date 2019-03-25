@@ -1,44 +1,79 @@
 package com.fmalessio.twitterapi.service;
 
-import static java.util.Comparator.comparingLong;
-import static java.util.stream.Collectors.collectingAndThen;
-import static java.util.stream.Collectors.toCollection;
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.util.Date;
+import java.util.UUID;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
-
+import org.quartz.JobBuilder;
+import org.quartz.JobDataMap;
+import org.quartz.JobDetail;
+import org.quartz.JobKey;
+import org.quartz.Scheduler;
+import org.quartz.SchedulerException;
+import org.quartz.SimpleScheduleBuilder;
+import org.quartz.Trigger;
+import org.quartz.TriggerBuilder;
+import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
-import org.springframework.social.twitter.api.Tweet;
-import org.springframework.social.twitter.api.Twitter;
-import org.springframework.social.twitter.api.impl.TwitterTemplate;
 import org.springframework.stereotype.Service;
+
+import com.fmalessio.twitterapi.quartz.jobs.TweetsQuartzJob;
 
 @Service
 public class TweetsServiceImpl implements TweetsService {
 
-	private Twitter twitter;
-
 	@Autowired
-	public TweetsServiceImpl(@Value("${twitter.consumerKey}") String twitterConsumerKey,
-			@Value("${twitter.consumerSecret}") String twitterConsumerSecret) {
-		twitter = new TwitterTemplate(twitterConsumerKey, twitterConsumerSecret);
+	private Scheduler scheduler;
+
+	private String TRIGGER_GROUP_NAME = "tweets-search-scheduler";
+	private String JOB_GROUP_NAME = "tweets-jobs";
+	private int INTERVAL_IN_SECONDS = 30;
+
+	public void runScheduler() {
+		JobDetail jobDetail = buildJobDetail();
+		ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.systemDefault()).plusSeconds(30);
+		Trigger trigger = buildJobTrigger(jobDetail, dateTime);
+		try {
+			scheduler.scheduleJob(jobDetail, trigger);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
 	}
 
-	public List<Tweet> getTweetsByHashtag(final String hashtag, final int amount) {
-		List<Tweet> tweets = twitter.searchOperations().search(hashtag, amount).getTweets();
+	private JobDetail buildJobDetail() {
+		JobDataMap jobDataMap = new JobDataMap();
 
-		// Remove duplicates, move this to the wrapper search
-		tweets = tweets.stream().collect(
-				collectingAndThen(toCollection(() -> new TreeSet<>(comparingLong(Tweet::getId))), ArrayList::new));
-		
-		return tweets;
+		jobDataMap.put("number", 5);
+		jobDataMap.put("value", "#boca");
+
+		return JobBuilder.newJob(TweetsQuartzJob.class).withIdentity(UUID.randomUUID().toString(), JOB_GROUP_NAME)
+				.withDescription("Testing Twitter").usingJobData(jobDataMap).storeDurably().build();
 	}
 
-	public List<Tweet> getTweetsByUser(final String user, final int amount) {
-		List<Tweet> tweets = twitter.timelineOperations().getUserTimeline(user, amount);
-		return tweets;
+	private Trigger buildJobTrigger(JobDetail jobDetail, ZonedDateTime startAt) {
+		return TriggerBuilder.newTrigger().forJob(jobDetail)
+				.withIdentity(jobDetail.getKey().getName(), TRIGGER_GROUP_NAME).withDescription("Search Tweets")
+				.startAt(Date.from(startAt.toInstant())).withSchedule(SimpleScheduleBuilder.simpleSchedule()
+						.withIntervalInSeconds(INTERVAL_IN_SECONDS).repeatForever())
+				.build();
+	}
+
+	public void removeJob(String jobName) {
+		TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TRIGGER_GROUP_NAME);
+		JobKey jobKey = JobKey.jobKey(jobName, JOB_GROUP_NAME);
+		try {
+			Trigger trigger;
+			trigger = (Trigger) scheduler.getTrigger(triggerKey);
+			if (trigger == null) {
+				return;
+			}
+			scheduler.pauseTrigger(triggerKey);
+			scheduler.unscheduleJob(triggerKey);
+			scheduler.deleteJob(jobKey);
+		} catch (SchedulerException e) {
+			e.printStackTrace();
+		}
 	}
 
 }
