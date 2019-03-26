@@ -3,7 +3,6 @@ package com.fmalessio.twitterapi.service;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
@@ -18,6 +17,7 @@ import org.quartz.TriggerKey;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.fmalessio.twitterapi.entity.Interest;
 import com.fmalessio.twitterapi.quartz.jobs.TweetsQuartzJob;
 
 @Service
@@ -28,12 +28,15 @@ public class TweetsServiceImpl implements TweetsService {
 
 	private String TRIGGER_GROUP_NAME = "tweets-search-scheduler";
 	private String JOB_GROUP_NAME = "tweets-jobs";
-	private int INTERVAL_IN_SECONDS = 30;
+	private String JOB_ID_PREFIX = "tweet-job-";
+	private int INTERVAL_SEARCH_SECONDS = 30;
 
-	public void runScheduler() {
-		JobDetail jobDetail = buildJobDetail();
-		ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.systemDefault()).plusSeconds(30);
+	public void runScheduler(Interest interest) {
+		JobDetail jobDetail = buildJobDetail(interest);
+
+		ZonedDateTime dateTime = ZonedDateTime.now(ZoneId.of("America/Argentina/Buenos_Aires")).plusSeconds(30);
 		Trigger trigger = buildJobTrigger(jobDetail, dateTime);
+
 		try {
 			scheduler.scheduleJob(jobDetail, trigger);
 		} catch (SchedulerException e) {
@@ -41,25 +44,29 @@ public class TweetsServiceImpl implements TweetsService {
 		}
 	}
 
-	private JobDetail buildJobDetail() {
+	private JobDetail buildJobDetail(Interest interest) {
 		JobDataMap jobDataMap = new JobDataMap();
 
-		jobDataMap.put("number", 5);
-		jobDataMap.put("value", "#boca");
+		jobDataMap.put("interestValue", interest.getValue());
+		jobDataMap.put("interestType", interest.getInterestType().toString());
 
-		return JobBuilder.newJob(TweetsQuartzJob.class).withIdentity(UUID.randomUUID().toString(), JOB_GROUP_NAME)
-				.withDescription("Testing Twitter").usingJobData(jobDataMap).storeDurably().build();
+		String jobName = JOB_ID_PREFIX + interest.getId();
+
+		return JobBuilder.newJob(TweetsQuartzJob.class).withIdentity(jobName, JOB_GROUP_NAME)
+				.withDescription("Tweets of interest").usingJobData(jobDataMap).storeDurably().build();
 	}
 
 	private Trigger buildJobTrigger(JobDetail jobDetail, ZonedDateTime startAt) {
 		return TriggerBuilder.newTrigger().forJob(jobDetail)
 				.withIdentity(jobDetail.getKey().getName(), TRIGGER_GROUP_NAME).withDescription("Search Tweets")
 				.startAt(Date.from(startAt.toInstant())).withSchedule(SimpleScheduleBuilder.simpleSchedule()
-						.withIntervalInSeconds(INTERVAL_IN_SECONDS).repeatForever())
+						.withIntervalInSeconds(INTERVAL_SEARCH_SECONDS).repeatForever())
 				.build();
 	}
 
-	public void removeJob(String jobName) {
+	public void removeJobByInterestId(String interestId) {
+		String jobName = JOB_ID_PREFIX + interestId;
+
 		TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TRIGGER_GROUP_NAME);
 		JobKey jobKey = JobKey.jobKey(jobName, JOB_GROUP_NAME);
 		try {
