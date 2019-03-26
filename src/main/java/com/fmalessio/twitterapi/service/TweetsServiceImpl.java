@@ -47,6 +47,7 @@ public class TweetsServiceImpl implements TweetsService {
 	private JobDetail buildJobDetail(Interest interest) {
 		JobDataMap jobDataMap = new JobDataMap();
 
+		jobDataMap.put("interestId", interest.getId());
 		jobDataMap.put("interestValue", interest.getValue());
 		jobDataMap.put("interestType", interest.getInterestType().toString());
 
