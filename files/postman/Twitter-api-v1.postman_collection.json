@@ -1,0 +1,291 @@
+{
+	"info": {
+		"_postman_id": "c9c87846-4a02-4ae5-b2ea-9dcfa321af87",
+		"name": "Twitter-api-v1",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Test app",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						""
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/users?id=test@test.com",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"users"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "test@test.com"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Board interests",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/boards/3/interests",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"boards",
+						"3",
+						"interests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Board tweets",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/boards/3/tweets?from=0&to=0",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"boards",
+						"3",
+						"tweets"
+					],
+					"query": [
+						{
+							"key": "from",
+							"value": "0"
+						},
+						{
+							"key": "to",
+							"value": "0"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "User login",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"id\": \"test2@test.com\",\n    \"full-name\": \"Ntest2 Stest2\"\n}"
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/users",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"users"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Interest save",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"value\": \"@alessiofederico\", \"board-id\": \"3\", \"interest-type\": \"USER\" }"
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/interests",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"interests"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Board save",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{ \"name\": \"Test table 3\", \"user-id\": \"test@test.com\" }"
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/boards",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"boards"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Board delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/boards/2",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"boards",
+						"2"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Interest delete",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "{{BASE_URL_LOCAL}}/interests/8",
+					"host": [
+						"{{BASE_URL_LOCAL}}"
+					],
+					"path": [
+						"interests",
+						"8"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"id": "a94a9a04-691c-4d43-b910-8150576aec4f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"id": "0617649c-b28f-4503-8fc5-3b3028a89b2f",
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"id": "379d95f3-b1b1-46b7-a19d-60572095ae85",
+			"key": "BASE_URL_PROD",
+			"value": "",
+			"type": "string"
+		},
+		{
+			"id": "0eb72c2c-4487-4f98-a449-a53dd7468120",
+			"key": "BASE_URL_LOCAL",
+			"value": "",
+			"type": "string"
+		}
+	]
+}
