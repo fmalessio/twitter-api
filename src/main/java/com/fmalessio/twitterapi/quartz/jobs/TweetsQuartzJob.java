@@ -7,6 +7,8 @@ import java.util.List;
 import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.scheduling.quartz.QuartzJobBean;
@@ -21,6 +23,8 @@ import com.fmalessio.twitterapi.repository.SearchedTweetRepository;
 
 @Component
 public class TweetsQuartzJob extends QuartzJobBean {
+
+	Logger logger = LoggerFactory.getLogger(TweetsQuartzJob.class);
 
 	private static final int INTEREST_SEARCH_AMOUNT = 5;
 
@@ -53,6 +57,8 @@ public class TweetsQuartzJob extends QuartzJobBean {
 		} else if (InterestType.USER.equals(interestType)) {
 			tweets = getTweetsByUser(interestValue);
 		}
+
+		logger.info("Tweets: " + tweets.size() + " for " + interestValue);
 
 		saveTweets(tweets, interestId);
 

@@ -30,7 +30,7 @@ public class SearchedTweet {
 	public SearchedTweet(Tweet tweet, long interestId) {
 		this.id = tweet.getId();
 		this.interestId = interestId;
-		this.text = tweet.getText();
+		this.text = tweet.getUnmodifiedText();
 		this.createdAt = tweet.getCreatedAt().getTime();
 		this.fromUser = tweet.getUser().getName();
 	}

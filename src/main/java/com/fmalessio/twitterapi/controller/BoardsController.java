@@ -1,5 +1,6 @@
 package com.fmalessio.twitterapi.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,12 +11,14 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fmalessio.twitterapi.entity.Board;
+import com.fmalessio.twitterapi.entity.SearchedTweet;
 import com.fmalessio.twitterapi.service.BoardsService;
 
 @Controller
@@ -44,8 +47,21 @@ public class BoardsController {
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
+		if (board.isPresent()) {
+			return mapper.writeValueAsString(board.get().getInterests());
+		}
+		return mapper.writeValueAsString("[]");
+	}
 
-		return mapper.writeValueAsString(board.get());
+	@GetMapping("/{id}/tweets")
+	@ResponseBody
+	public String getBoardTweets(@PathVariable long id, @RequestParam(name = "from", required = true) int from,
+			@RequestParam(name = "to", required = true) int to) throws JsonProcessingException {
+		List<SearchedTweet> tweets = boardsService.getAllSearcheadTweets(id);
+
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new Jdk8Module());
+		return mapper.writeValueAsString(tweets);
 	}
 
 }
