@@ -4,7 +4,7 @@ import com.fmalessio.twitterapi.entity.Interest;
 
 public interface InterestsService {
 
-	void create(Interest interest);
+	Interest create(Interest interest);
 
 	void delete(long id);
 

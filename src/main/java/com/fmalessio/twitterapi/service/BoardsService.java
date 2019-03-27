@@ -10,7 +10,7 @@ public interface BoardsService {
 
 	Optional<Board> getBoard(long id);
 
-	void createBoard(Board board);
+	Board createBoard(Board board);
 
 	void delete(long id);
 

@@ -21,9 +21,10 @@ public class InterestsServiceImpl implements InterestsService {
 	}
 
 	@Override
-	public void create(Interest interest) {
+	public Interest create(Interest interest) {
 		interest = interestRepository.saveAndFlush(interest);
 		tweetsService.runScheduler(interest);
+		return interest;
 	}
 
 	@Override
