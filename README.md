@@ -49,7 +49,7 @@ DELETE "/interests/{id}" <br />
 
 Para más detalles consultar el proyecto postman: [Twitter-api.postman_collection.json](https://github.com/fmalessio/twitter-api/blob/master/files/postman/Twitter-api.postman_collection.json)
 
-### Base de datos
+### Database
 Heroku Addon: "ClearDB MySQL" <br />
 Esquema: <br />
 
