@@ -31,8 +31,8 @@ public class InterestsServiceImpl implements InterestsService {
 	public void delete(long id) {
 		Optional<Interest> interest = interestRepository.findById(id);
 		if (interest.isPresent()) {
+			tweetsService.deleteTweetsByInterestId(id);
 			interestRepository.deleteById(id);
-			tweetsService.removeJobByInterestId(Long.toString(id));
 		}
 	}
 

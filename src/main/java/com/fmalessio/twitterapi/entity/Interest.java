@@ -36,7 +36,7 @@ public class Interest {
 
 	@Column(name = "board_id")
 	@JsonProperty("board-id")
-	private String boardId;
+	private Long boardId;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
 	@JoinColumn(name = "interest_id")
@@ -66,11 +66,11 @@ public class Interest {
 		this.interestType = interestType;
 	}
 
-	public String getBoardId() {
+	public Long getBoardId() {
 		return boardId;
 	}
 
-	public void setBoardId(String boardId) {
+	public void setBoardId(long boardId) {
 		this.boardId = boardId;
 	}
 

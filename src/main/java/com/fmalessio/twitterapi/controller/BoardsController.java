@@ -30,8 +30,11 @@ public class BoardsController {
 
 	@PostMapping
 	@ResponseBody
-	public void createBoard(@RequestBody Board board) throws JsonProcessingException {
-		boardsService.createBoard(board);
+	public String createBoard(@RequestBody Board board) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new Jdk8Module());
+
+		return mapper.writeValueAsString(boardsService.createBoard(board));
 	}
 
 	@DeleteMapping("/{id}")

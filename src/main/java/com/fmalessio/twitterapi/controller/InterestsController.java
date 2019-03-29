@@ -9,6 +9,9 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jdk8.Jdk8Module;
 import com.fmalessio.twitterapi.entity.Interest;
 import com.fmalessio.twitterapi.service.InterestsService;
 
@@ -21,10 +24,13 @@ public class InterestsController {
 
 	@PostMapping
 	@ResponseBody
-	public void create(@RequestBody Interest interest) {
-		interestsService.create(interest);
+	public String create(@RequestBody Interest interest) throws JsonProcessingException {
+		ObjectMapper mapper = new ObjectMapper();
+		mapper.registerModule(new Jdk8Module());
+
+		return mapper.writeValueAsString(interestsService.create(interest));
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseBody
 	public void delete(@PathVariable long id) {

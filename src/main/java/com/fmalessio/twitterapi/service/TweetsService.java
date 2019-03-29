@@ -4,8 +4,8 @@ import com.fmalessio.twitterapi.entity.Interest;
 
 public interface TweetsService {
 
-	public void runScheduler(Interest interest);
+	void runScheduler(Interest interest);
 
-	public void removeJobByInterestId(String interestId);
+	void deleteTweetsByInterestId(long interestId);
 
 }

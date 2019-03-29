@@ -23,7 +23,6 @@ import com.fmalessio.twitterapi.quartz.jobs.TweetsQuartzJob;
 @Service
 public class TweetsServiceImpl implements TweetsService {
 
-	@Autowired
 	private Scheduler scheduler;
 
 	private String TRIGGER_GROUP_NAME = "tweets-search-scheduler";
@@ -31,6 +30,12 @@ public class TweetsServiceImpl implements TweetsService {
 	private String JOB_ID_PREFIX = "tweet-job-";
 	private int INTERVAL_SEARCH_SECONDS = 30;
 
+	@Autowired
+	public TweetsServiceImpl(Scheduler scheduler) {
+		this.scheduler = scheduler;
+	}
+
+	@Override
 	public void runScheduler(Interest interest) {
 		JobDetail jobDetail = buildJobDetail(interest);
 
@@ -42,6 +47,12 @@ public class TweetsServiceImpl implements TweetsService {
 		} catch (SchedulerException e) {
 			e.printStackTrace();
 		}
+	}
+
+	@Override
+	public void deleteTweetsByInterestId(long interestId) {
+		removeJobByInterestId(Long.toString(interestId));
+		// TODO: remove all tweets
 	}
 
 	private JobDetail buildJobDetail(Interest interest) {
@@ -65,7 +76,7 @@ public class TweetsServiceImpl implements TweetsService {
 				.build();
 	}
 
-	public void removeJobByInterestId(String interestId) {
+	private void removeJobByInterestId(String interestId) {
 		String jobName = JOB_ID_PREFIX + interestId;
 
 		TriggerKey triggerKey = TriggerKey.triggerKey(jobName, TRIGGER_GROUP_NAME);
