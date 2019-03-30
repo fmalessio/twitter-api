@@ -1,5 +1,6 @@
 package com.fmalessio.twitterapi.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,15 @@ public class InterestsServiceImpl implements InterestsService {
 		if (interest.isPresent()) {
 			tweetsService.deleteTweetsByInterestId(id);
 			interestRepository.deleteById(id);
+		}
+	}
+
+	@Override
+	public void deleteAllByIds(List<Long> ids) {
+		List<Interest> interests = interestRepository.findAllById(ids);
+		for (Interest interest : interests) {
+			tweetsService.deleteTweetsByInterestId(interest.getId());
+			interestRepository.deleteById(interest.getId());
 		}
 	}
 

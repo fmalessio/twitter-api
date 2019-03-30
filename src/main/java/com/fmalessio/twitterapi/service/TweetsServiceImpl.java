@@ -4,6 +4,8 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Date;
 
+import javax.transaction.Transactional;
+
 import org.quartz.JobBuilder;
 import org.quartz.JobDataMap;
 import org.quartz.JobDetail;
@@ -19,11 +21,13 @@ import org.springframework.stereotype.Service;
 
 import com.fmalessio.twitterapi.entity.Interest;
 import com.fmalessio.twitterapi.quartz.jobs.TweetsQuartzJob;
+import com.fmalessio.twitterapi.repository.SearchedTweetRepository;
 
 @Service
 public class TweetsServiceImpl implements TweetsService {
 
 	private Scheduler scheduler;
+	private SearchedTweetRepository searchedTweetRepository;
 
 	private String TRIGGER_GROUP_NAME = "tweets-search-scheduler";
 	private String JOB_GROUP_NAME = "tweets-jobs";
@@ -31,8 +35,9 @@ public class TweetsServiceImpl implements TweetsService {
 	private int INTERVAL_SEARCH_SECONDS = 30;
 
 	@Autowired
-	public TweetsServiceImpl(Scheduler scheduler) {
+	public TweetsServiceImpl(Scheduler scheduler, SearchedTweetRepository searchedTweetRepository) {
 		this.scheduler = scheduler;
+		this.searchedTweetRepository = searchedTweetRepository;
 	}
 
 	@Override
@@ -50,9 +55,11 @@ public class TweetsServiceImpl implements TweetsService {
 	}
 
 	@Override
+	@Transactional
 	public void deleteTweetsByInterestId(long interestId) {
 		removeJobByInterestId(Long.toString(interestId));
-		// TODO: remove all tweets
+		searchedTweetRepository.deleteByInterestId(interestId);
+		searchedTweetRepository.flush();
 	}
 
 	private JobDetail buildJobDetail(Interest interest) {
