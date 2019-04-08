@@ -15,7 +15,6 @@ import javax.servlet.http.HttpServletResponse;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.core.annotation.Order;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
@@ -28,7 +27,6 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 @Component
-@Order(1)
 public class RequestResponseFilter implements Filter {
 
 	@Value("${authentication.on}")
@@ -44,15 +42,23 @@ public class RequestResponseFilter implements Filter {
 		HttpServletResponse res = (HttpServletResponse) response;
 		logger.info("Logging Request  {} : {}", req.getMethod(), req.getRequestURI());
 
+		// Go
+		if (req.getMethod().equals("OPTIONS")) {
+			chain.doFilter(request, response);
+			return;
+		}
+
 		if (checkAuthentication) {
-			boolean isValidToken = checkAuthentication(req.getParameter("token"));
+			boolean isValidToken = checkAuthentication(req.getHeader("token"));
 			if (!isValidToken) {
 				res.setStatus(HttpStatus.BAD_REQUEST.value());
 				return;
 			}
 		}
+
 		// Go
 		chain.doFilter(request, response);
+
 		logger.info("Logging Response :{}", res.getContentType());
 	}
 

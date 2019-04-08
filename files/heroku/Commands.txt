@@ -5,6 +5,9 @@ https://devcenter.heroku.com/articles/getting-started-with-java
 // Create Heroku
 heroku create
 
+// Connect folder with existing Heroku app
+heroku git:remote -a twitter-board-app
+
 // Deploy app from Github
 git push heroku master
 

@@ -30,7 +30,7 @@ Spring boot, Java, JPA, Quartz scheduler, Heroku y MySQL.
 - Create a MySQL database
 - Run the sql files in the /files/sql
 - Change the properties in the "application-local.properties" to use your database
-- Change environment (profile) to "local" the "application.properties"
+- Change environment (profile) to "local" in "application.properties"
 - Ready!
 
 ### Host information
