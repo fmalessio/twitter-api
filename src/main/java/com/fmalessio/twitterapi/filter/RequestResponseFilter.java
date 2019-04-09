@@ -43,7 +43,7 @@ public class RequestResponseFilter implements Filter {
 		logger.info("Logging Request  {} : {}", req.getMethod(), req.getRequestURI());
 
 		// Go
-		if (req.getMethod().equals("OPTIONS")) {
+		if (req.getMethod().equals("OPTIONS") || req.getMethod().equals("GET")) {
 			chain.doFilter(request, response);
 			return;
 		}
