@@ -31,7 +31,7 @@ public class RequestResponseFilter implements Filter {
 
 	@Value("${authentication.on}")
 	private boolean checkAuthentication;
-	private String APP_CLIENT_ID = "425080559212-0futf7p75r8kcl8lv0n72iiiqo6ktt2f.apps.googleusercontent.com";
+	private String APP_CLIENT_ID = "425080559212-hr2urltvsv5qjtvm213me5k1hljmrohh.apps.googleusercontent.com";
 
 	Logger logger = LoggerFactory.getLogger(TweetsQuartzJob.class);
 
