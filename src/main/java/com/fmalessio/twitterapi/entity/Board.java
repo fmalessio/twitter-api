@@ -13,8 +13,6 @@ import javax.persistence.JoinColumn;
 import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
-import com.fasterxml.jackson.annotation.JsonProperty;
-
 @Entity
 @Table(name = "`board`")
 public class Board {
@@ -28,7 +26,6 @@ public class Board {
 	private String name;
 
 	@Column(name = "user_id")
-	@JsonProperty("user-id")
 	private String userId;
 
 	@OneToMany(cascade = CascadeType.ALL, orphanRemoval = true)
