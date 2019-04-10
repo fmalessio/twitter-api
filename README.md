@@ -37,6 +37,9 @@ Spring boot, Java, JPA, Quartz scheduler, Heroku y MySQL.
 BASE_URL_LOCAL = http://localhost:8080  <br />
 BASE_URL_PROD = https://twitter-back-api.herokuapp.com
 
+### Github frontend
+https://github.com/fmalessio/twitter-board
+
 ### App architecture
 ![schema in database](https://github.com/fmalessio/twitter-api/blob/master/files/architecture/architecture.jpg)
 
