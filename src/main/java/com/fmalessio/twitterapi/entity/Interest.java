@@ -17,7 +17,6 @@ import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
 @Table(name = "`interest`")
@@ -32,12 +31,10 @@ public class Interest {
 	private String value;
 
 	@Column(name = "interest_type")
-	@JsonProperty("interest-type")
 	@Enumerated(EnumType.STRING)
 	private InterestType interestType;
 
 	@Column(name = "board_id")
-	@JsonProperty("board-id")
 	private Long boardId;
 
 	@JsonIgnore

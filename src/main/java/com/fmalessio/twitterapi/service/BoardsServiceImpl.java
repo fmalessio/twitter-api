@@ -52,9 +52,8 @@ public class BoardsServiceImpl implements BoardsService {
 	}
 
 	@Override
-	public List<SearchedTweet> getAllSearcheadTweets(long id) {
-		// TODO: FROM, TO params
-		return searchedTweetRepository.findAllTweetsByBoard(id);
+	public List<SearchedTweet> getAllSearcheadTweets(long id, long lastSearched) {
+		return searchedTweetRepository.findAllTweetsByBoard(id, lastSearched);
 	}
 
 }

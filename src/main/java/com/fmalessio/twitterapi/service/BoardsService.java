@@ -14,6 +14,6 @@ public interface BoardsService {
 
 	void delete(long id);
 
-	List<SearchedTweet> getAllSearcheadTweets(long id);
+	List<SearchedTweet> getAllSearcheadTweets(long id, long lastSearched);
 
 }

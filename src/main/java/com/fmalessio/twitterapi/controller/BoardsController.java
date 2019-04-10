@@ -1,5 +1,6 @@
 package com.fmalessio.twitterapi.controller;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -53,14 +54,14 @@ public class BoardsController {
 		if (board.isPresent()) {
 			return mapper.writeValueAsString(board.get().getInterests());
 		}
-		return mapper.writeValueAsString("[]");
+		return mapper.writeValueAsString(Collections.emptyList());
 	}
 
 	@GetMapping("/{id}/tweets")
 	@ResponseBody
-	public String getBoardTweets(@PathVariable long id, @RequestParam(name = "from", required = true) int from,
-			@RequestParam(name = "to", required = true) int to) throws JsonProcessingException {
-		List<SearchedTweet> tweets = boardsService.getAllSearcheadTweets(id);
+	public String getBoardTweets(@PathVariable long id,
+			@RequestParam(name = "last-searched", required = true) long lastSearched) throws JsonProcessingException {
+		List<SearchedTweet> tweets = boardsService.getAllSearcheadTweets(id, lastSearched);
 
 		ObjectMapper mapper = new ObjectMapper();
 		mapper.registerModule(new Jdk8Module());
